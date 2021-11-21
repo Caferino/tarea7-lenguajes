@@ -9,6 +9,7 @@ adecuadamente la cláusula cut (!).
  
 1. Implementar el predicado enesimo en Prolog encuentra el n-ésimo elemento de una 
 lista. El primer elemento de la lista es el número 1. 
+
 Probar con:  
 ?- enesimo(3,[-1,6,2,-3],M).  => M = 2. 
 ?- enesimo(8,[-1,6,2,-3],8).  => false. 
