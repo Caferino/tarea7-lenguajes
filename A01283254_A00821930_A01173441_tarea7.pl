@@ -44,7 +44,15 @@ aux(X,[H|T],[[X,H]|R]):- aux(X,T,R).
 % Implementar el predicado cuenta_profundo en Prolog que cuente las veces que 
 % aparece un elemento particular dentro de una lista imbricada. 
 
-
+cuenta_profundo(Elem, [H|T], Count) :- !,
+    cuenta_profundo(Elem, H, X1),
+    cuenta_profundo(Elem, T, X2),
+    Count is X1 + X2.
+cuenta_profundo(Elem, N, Count) :- !,
+    (Elem = N ->
+        Count is 1;
+        Count is 0).
+cuenta_profundo(_,[],0).
 
 % ================ PROBLEMA #5: ================
 % Implementar el predicado lista_unicos en Prolog que obtenga una lista con los 
