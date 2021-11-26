@@ -65,7 +65,16 @@ cuenta_profundo(_,[],0).
 % Implementar el predicado mayores en Prolog que regrese una lista con los 
 % elementos mayores que un valor dado en un árbol binario descrito con la función: 
 
-
+mayores(Num, arbol(Raiz, Izq, Der), Res) :- !,
+    mayores(Num, Izq, ResIzq),
+    (
+    Raiz > Num ->
+        append(ResIzq, [Raiz], L);
+        append(ResIzq, [], L)
+    ),
+    mayores(Num, Der, ResDer),
+    append(L, ResDer, Res).
+mayores(_, nil, []).
 
 % ================ PROBLEMA #7: ================
 % Implementar el predicado siembra en Prolog que a partir de una lista de 
