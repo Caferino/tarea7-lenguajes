@@ -37,7 +37,7 @@ rango(X,Y,[X|Xs]) :- %Xs is rest of the list(tails)
 cartesiano([],_,[]).
 cartesiano([H1|T1],L2,R):- aux(H1,L2,R1),cartesiano(T1,L2,R2),append(R1,R2,R).
 
-aux(X,[],[]).
+aux(_,[],[]).
 aux(X,[H|T],[[X,H]|R]):- aux(X,T,R).
 
 % ================ PROBLEMA #4: ================
@@ -58,7 +58,21 @@ cuenta_profundo(_,[],0).
 % Implementar el predicado lista_unicos en Prolog que obtenga una lista con los 
 % elementos que no aparecen repetidos dentro de una lista imbricada. 
 
+lista_unicos(Lista, R) :- 
+    flatten(Lista, R1),
+    lista_unicos_aux(R1, R).
 
+lista_unicos_aux([], []) :- !.
+lista_unicos_aux([H|T], R) :- 
+    (
+    member(H, T) ->
+    delete(T, H, L),
+    lista_unicos_aux(L, R1),
+    R = R1
+    ;
+    lista_unicos_aux(T, _),
+    R = [H|T]
+    ).
 
 
 % ================ PROBLEMA #6: ================
@@ -80,6 +94,22 @@ mayores(_, nil, []).
 % Implementar el predicado siembra en Prolog que a partir de una lista de 
 % números cree un árbol binario de búsqueda descrito con la función:  
 
+siembra(Lista, Res) :- siembra_aux(Lista, nil, Res).
 
+siembra_aux([H|T], Arbol, Res) :- !,
+    inserta(H, Arbol, X),
+    siembra_aux(T, X, Res).
+siembra_aux([], Res, Res).
+
+inserta(E, arbol(Raiz1, L1, R1), arbol(Raiz2, L2, R2)) :- !,
+    (   E < Raiz1
+    ->  inserta(E, L1, U),
+        (L2, Raiz2, R2) = (U, Raiz1, R1)
+    ;   E > Raiz1
+    ->  inserta(E, R1, U),
+        (L2, Raiz2, R2) = (L1, Raiz1, U)
+    ;   (L2, Raiz2, R2) = (L1, Raiz1, R1)  
+    ).
+inserta(E, nil, arbol(E, nil, nil)).
 
 % ================ PRUEBAS: ================
