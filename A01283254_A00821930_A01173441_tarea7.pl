@@ -37,7 +37,7 @@ rango(X,Y,[X|Xs]) :- %Xs is rest of the list(tails)
 cartesiano([],_,[]).
 cartesiano([H1|T1],L2,R):- aux(H1,L2,R1),cartesiano(T1,L2,R2),append(R1,R2,R).
 
-aux(X,[],[]).
+aux(_,[],[]).
 aux(X,[H|T],[[X,H]|R]):- aux(X,T,R).
 
 % ================ PROBLEMA #4: ================
@@ -58,35 +58,21 @@ cuenta_profundo(_,[],0).
 % Implementar el predicado lista_unicos en Prolog que obtenga una lista con los 
 % elementos que no aparecen repetidos dentro de una lista imbricada. 
 
-lista_unicos(Lista, Res) :- 
-    aplana(Lista, R1),
-    lista_unicos_aux(R1, Res).
-
-aplana([],[]) :- !.
-aplana([H|T], Res) :- !, 
-    aplana(H, AplanaH), 
-    aplana(T, AplanaT), 
-    append(AplanaH, AplanaT, Res).
-aplana(L, [L]).
+lista_unicos(Lista, R) :- 
+    flatten(Lista, R1),
+    lista_unicos_aux(R1, R).
 
 lista_unicos_aux([], []) :- !.
-lista_unicos_aux([H|T], Res) :- 
+lista_unicos_aux([H|T], R) :- 
     (
     member(H, T) ->
-    elimina(H, [H|T], ListaSinElem),
-    lista_unicos_aux(ListaSinElem, R1),
-    Res = R1
+    delete(T, H, L),
+    lista_unicos_aux(L, R1),
+    R = R1
     ;
-    lista_unicos_aux(T, R1),
-    Res = [H|T]
+    lista_unicos_aux(T, _),
+    R = [H|T]
     ).
-
-elimina(_, [], []) :- !.
-elimina(E, [E|T], R) :- !, 
-    elimina(E, T, R1), 
-    R = R1.
-elimina(E, [H|T], [H|T2]) :- 
-    elimina(E, T, T2).
 
 
 % ================ PROBLEMA #6: ================
